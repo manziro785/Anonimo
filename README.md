@@ -19,5 +19,6 @@ Anonimo — это платформа для **анонимного сбора �
 ### **Frontend** (React + Vite + TypeScript)  
 ...
 ### **Backend** (Java Spring Boot)  
+...
 
 
