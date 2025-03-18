@@ -1,6 +1,12 @@
 .container {
   margin-left: 290px;
   padding: 3rem 4rem 0 4rem;
+  /* display: flex; */
+  /* width: 100% !important; */
+}
+
+.container * {
+  background: none;
 }
 
 .card {
@@ -10,9 +16,31 @@
   margin-bottom: 1.5rem;
   padding: 1.8rem 2rem;
   display: flex;
-  min-height: 20rem;
+  min-height: 10rem;
 }
 
+.info {
+  margin-left: 2rem;
+}
+
+.nickname {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.company_name {
+  font-size: 1.2rem;
+  margin-top: 1rem;
+}
+
+.company_name img {
+  margin-right: 0.5rem;
+}
+
+.logo_icon {
+  display: flex;
+  align-items: center;
+}
 @media (max-width: 1000px) {
   .container {
     margin-left: 230px;

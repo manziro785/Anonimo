@@ -4,7 +4,7 @@ import logo from "../../../assets/common/logo_main.svg";
 
 import eldar from "../../../assets/team_imgs/photo_2025-02-17_15-25-01.jpg";
 import tilek from "../../../assets/team_imgs/photo_2025-02-05_20-11-37.jpg";
-import aruuke from "../../../assets/team_imgs/photo_2025-02-17_17-18-38.jpg";
+import aruuke from "../../../assets/team_imgs/photo_2025-03-18_19-14-06 1.svg";
 import argen from "../../../assets/team_imgs/photo_2025-02-19_22-27-09.jpg";
 
 interface TeamMember {
@@ -41,7 +41,7 @@ export default function Aboutus() {
     {
       name: "Арген",
       surname: "Шамыров",
-      position: "Таргет менеджер",
+      position: "UX&UI Дизайнер",
       img: argen,
       id: "item_4",
     },

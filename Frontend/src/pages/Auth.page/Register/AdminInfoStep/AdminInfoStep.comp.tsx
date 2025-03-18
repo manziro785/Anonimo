@@ -1,16 +1,20 @@
-import style from "./AdminInfoStep.module.css";
-import "../../common.style.css";
+import { useLocation } from "react-router-dom";
 import AuthLayout from "../../../../components/general/Auth/AuthLayout/AuthLayout.comp";
 import style_aurh from "../../../../components/general/Auth/AuthHeader/AuthHeader.module.css";
+import style from "./AdminInfoStep.module.css";
+import "../../common.style.css";
 
 export default function AdminInfoStep() {
+  const location = useLocation();
+  const role = location.state?.role || "USER"; // Дефолтное значение
+
   return (
     <div style={{ background: "none" }}>
       <AuthLayout
-        title="Регистация"
+        title={`Регистрация ${role === "admin" ? "администратора" : "пользователя"}`}
         buttons={{
           next: { link: "/register_verification", text: "Продолжить" },
-          prev: { link: "/", text: "Вернуться" },
+          prev: { link: "/choose-role", text: "Вернуться" },
           relink: { link: "/login", text: "Уже есть аккаунт?" },
         }}
       >
@@ -31,17 +35,17 @@ export default function AdminInfoStep() {
               <span className={style_aurh.stepText}>Подтверждение почты</span>
             </div>
           </div>
+
           <div className="container_auth">
             <h3 className="step_auth" id="h3_auth">
               Этап 2
             </h3>
-            {/* <span></span> */}
             <h3 id="h3_auth">Заполните данные для регистрации</h3>
             <p className="p_auth">
-              Введите свою почту, создайте пароль и, если у вас есть команда,
-              укажите ее ID.
+              Выбранная роль: <strong>{role}</strong>
             </p>
           </div>
+
           <div className="value_auth">
             <div>
               <div>
@@ -53,11 +57,8 @@ export default function AdminInfoStep() {
                 <input type="password" placeholder="Введите пароль" />
               </div>
             </div>
+
             <div>
-              <div>
-                <label>Код комнаты</label>
-                <input type="text" placeholder="Введите код комнаты" />
-              </div>
               <div>
                 <label>Подтвердите пароль</label>
                 <input type="password" placeholder="Введите пароль снова" />

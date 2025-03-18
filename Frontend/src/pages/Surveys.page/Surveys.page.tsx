@@ -25,6 +25,17 @@ export default function SurveyPage() {
           type: "text",
           text: "Напишите ваш любимый язык программирования",
         },
+        {
+          id: "q3",
+          type: "radio",
+          text: "Каким фреймворком вы пользуетесь?",
+          options: ["React", "Vue", "Angular"],
+        },
+        {
+          id: "q4",
+          type: "text",
+          text: "Напишите ваш любимый язык программирования",
+        },
       ],
     },
     {
@@ -73,10 +84,14 @@ export default function SurveyPage() {
 
   return (
     <div className={style.container}>
-      <h1>{survey.title}</h1>
-      <form onSubmit={(e) => e.preventDefault()}>
-        {survey.questions.map((q) => (
-          <div key={q.id}>
+      <h1 className={style.company_name}>АруукеFest.kg</h1>
+      <h2 className={style.survey_name}>Тема: {survey.title}</h2>
+      <form className={style.block} onSubmit={(e) => e.preventDefault()}>
+        {survey.questions.map((q, index) => (
+          <div key={q.id} className={style.block_2}>
+            <p className={style.number_quest}>
+              Вопрос {index + 1} / {survey.questions.length}
+            </p>
             <p>{q.text}</p>
             {q.type === "radio" ? (
               q.options.map((option) => (
@@ -94,13 +109,19 @@ export default function SurveyPage() {
             ) : (
               <input
                 type="text"
+                className={style.input_text}
+                placeholder="Введите ваш ответ"
                 value={responses[q.id] || ""}
                 onChange={(e) => handleChange(q.id, e.target.value)}
               />
             )}
           </div>
         ))}
-        <button onClick={handleSubmit}>Отправить</button>
+        <div className={style.btn_submit}>
+          <button onClick={handleSubmit} className={style.btn_main}>
+            Отправить
+          </button>
+        </div>
       </form>
     </div>
   );
