@@ -1,0 +1,18 @@
+#active {
+  margin-left: -2rem;
+  padding-right: -1rem;
+  border-radius: 0 40px 40px 0;
+  z-index: 1;
+  background: var(--green-gradient);
+}
+
+#stepNumber {
+  background-color: #ffffff;
+  color: #2fab60;
+}
+
+@media (max-width: 780px) {
+  #stepNumber {
+    margin-right: -1rem;
+  }
+}
