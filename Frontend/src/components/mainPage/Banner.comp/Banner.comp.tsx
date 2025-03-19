@@ -20,7 +20,7 @@ export default function Banner() {
           </div>
           <div className={style.btns}>
             <NavLink
-              to="/register"
+              to="/reg"
               style={{
                 textDecoration: "none",
                 display: "flex",

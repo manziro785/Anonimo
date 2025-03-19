@@ -1,72 +1,46 @@
+import { useNavigate } from "react-router-dom";
 import QuestionCard from "../../components/general/dashboard/questionCard/questionCard.comp";
 import style from "./Dashboard.page.module.css";
 
 export default function Dashboard() {
-  const info_bar = [
+  const navigate = useNavigate();
+
+  const surveys = [
     {
-      id: "1",
-      title: "Новый администратор",
-      info: "Ребята, в нашем коллективе уже как 2 недели работает новый администратор, можете пожалуйста сказать, как хорошо он справляется со своими обязанностями",
-      date: "13.02.22",
-      size: 9,
-      company_name: "АруукеFest",
+      id: "survey1",
+      title: "Опрос по разработке",
+      info: "Расскажите, какие технологии вам нравятся.",
+      date: "15.03.25",
+      size: 10,
+      company_name: "SkillNet.kg",
     },
     {
-      id: "2",
-      title: "Новый администратор",
-      info: "Ребята, в нашем коллективе уже как 2 недели работает новый администратор, можете пожалуйста сказать, как хорошо он справляется со своими обязанностями",
-      date: "13.02.22",
-      size: 9,
-      company_name: "АруукеFest",
-    },
-    {
-      id: "3",
-      title: "Новый администратор",
-      info: "Ребята, в нашем коллективе уже как 2 недели работает новый администратор, можете пожалуйста сказать, как хорошо он справляется со своими обязанностями",
-      date: "13.02.22",
-      size: 9,
-      company_name: "АруукеFest",
-    },
-    {
-      id: "4",
-      title: "Новый администратор",
-      info: "Ребята, в нашем коллективе уже как 2 недели работает новый администратор, можете пожалуйста сказать, как хорошо он справляется со своими обязанностями",
-      date: "13.02.22",
-      size: 9,
-      company_name: "АруукеFest",
-    },
-    {
-      id: "5",
-      title: "Новый администратор",
-      info: "Ребята, в нашем коллективе уже как 2 недели работает новый администратор, можете пожалуйста сказать, как хорошо он справляется со своими обязанностями",
-      date: "13.02.22",
-      size: 9,
-      company_name: "АруукеFest",
-    },
-    {
-      id: "6",
-      title: "Новый администратор",
-      info: "Ребята, в нашем коллективе уже как 2 недели работает новый администратор, можете пожалуйста сказать, как хорошо он справляется со своими обязанностями",
-      date: "13.02.22",
-      size: 9,
-      company_name: "АруукеFest",
+      id: "survey2",
+      title: "Опрос по фильмам",
+      info: "Поделитесь любимыми фильмами и жанрами!",
+      date: "16.03.25",
+      size: 8,
+      company_name: "Anonimo",
     },
   ];
+
+  const handleSurveyClick = (surveyId) => {
+    navigate(`/survey/${surveyId}`);
+  };
+
   return (
-    <>
-      <div className={style.container}>
-        {/* <QuestionCard title="Новый администратор"> */}
-        {info_bar.map((item) => (
+    <div className={style.container}>
+      {surveys.map((survey) => (
+        <div key={survey.id} onClick={() => handleSurveyClick(survey.id)}>
           <QuestionCard
-            key={item.id}
-            title={item.title}
-            info={item.info}
-            size={item.size}
-            company_name={item.company_name}
-            date={item.date}
+            title={survey.title}
+            info={survey.info}
+            size={survey.size}
+            company_name={survey.company_name}
+            date={survey.date}
           />
-        ))}
-      </div>
-    </>
+        </div>
+      ))}
+    </div>
   );
 }

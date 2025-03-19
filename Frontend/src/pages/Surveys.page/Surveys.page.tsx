@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import style from "./Surveys.module.css";
 
 export default function SurveyPage() {
-  let { name } = useParams();
+  let { id } = useParams();
   const [survey, setSurvey] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -11,7 +11,7 @@ export default function SurveyPage() {
 
   const mockSurveys = [
     {
-      name: "chat1",
+      id: "survey1",
       title: "Опрос по разработке",
       questions: [
         {
@@ -25,21 +25,10 @@ export default function SurveyPage() {
           type: "text",
           text: "Напишите ваш любимый язык программирования",
         },
-        {
-          id: "q3",
-          type: "radio",
-          text: "Каким фреймворком вы пользуетесь?",
-          options: ["React", "Vue", "Angular"],
-        },
-        {
-          id: "q4",
-          type: "text",
-          text: "Напишите ваш любимый язык программирования",
-        },
       ],
     },
     {
-      name: "chat2",
+      id: "survey2",
       title: "Опрос по фильмам",
       questions: [
         {
@@ -59,7 +48,7 @@ export default function SurveyPage() {
 
   useEffect(() => {
     setTimeout(() => {
-      const foundSurvey = mockSurveys.find((s) => s.name === name);
+      const foundSurvey = mockSurveys.find((s) => s.id === id);
       if (foundSurvey) {
         setSurvey(foundSurvey);
       } else {
@@ -67,7 +56,7 @@ export default function SurveyPage() {
       }
       setLoading(false);
     }, 1000);
-  }, [name]);
+  }, [id]);
 
   const handleChange = (questionId, value) => {
     setResponses((prev) => ({ ...prev, [questionId]: value }));
