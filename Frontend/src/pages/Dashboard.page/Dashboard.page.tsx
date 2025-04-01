@@ -1,46 +1,58 @@
-import { useNavigate } from "react-router-dom";
-import QuestionCard from "../../components/general/dashboard/questionCard/questionCard.comp";
+import React, { useEffect, useState } from "react";
 import style from "./Dashboard.page.module.css";
+import axios from "axios";
+import { NavLink } from "react-router-dom";
 
-export default function Dashboard() {
-  const navigate = useNavigate();
+const Dashboard = () => {
+  const [surveys, setSurveys] = useState<any[]>([]); // Начальное состояние — пустой массив
+  const [userRole, setUserRole] = useState<string>("");
 
-  const surveys = [
-    {
-      id: "survey1",
-      title: "Опрос по разработке",
-      info: "Расскажите, какие технологии вам нравятся.",
-      date: "15.03.25",
-      size: 10,
-      company_name: "SkillNet.kg",
-    },
-    {
-      id: "survey2",
-      title: "Опрос по фильмам",
-      info: "Поделитесь любимыми фильмами и жанрами!",
-      date: "16.03.25",
-      size: 8,
-      company_name: "Anonimo",
-    },
-  ];
+  useEffect(() => {
+    // Логика для получения роли пользователя
+    const role = "ADMIN"; // Это пример, можно получить роль пользователя через auth-систему
+    setUserRole(role);
 
-  const handleSurveyClick = (surveyId) => {
-    navigate(`/survey/${surveyId}`);
-  };
+    // Получение списка опросников с бэка
+    axios
+      .get("/api/v1/surveys")
+      .then((response) => {
+        // Убедимся, что данные в response.data это массив
+        if (Array.isArray(response.data)) {
+          setSurveys(response.data);
+        } else {
+          console.error("Данные не в формате массива", response.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Ошибка при загрузке опросников:", error);
+      });
+  }, []);
 
   return (
-    <div className={style.container}>
-      {surveys.map((survey) => (
-        <div key={survey.id} onClick={() => handleSurveyClick(survey.id)}>
-          <QuestionCard
-            title={survey.title}
-            info={survey.info}
-            size={survey.size}
-            company_name={survey.company_name}
-            date={survey.date}
-          />
+    <div>
+      <div className={style.container}>
+        <h1>Все опросники</h1>
+        <div>
+          {Array.isArray(surveys) && surveys.length > 0 ? (
+            surveys.map((survey) => (
+              <div key={survey.id}>
+                <h3>{survey.title}</h3>
+                <p>{survey.description}</p>
+                {/* Ссылка на редактирование опросника */}
+                <a href={`/survey/${survey.id}`}>Редактировать</a>
+              </div>
+            ))
+          ) : (
+            <p>Нет доступных опросников</p>
+          )}
         </div>
-      ))}
+
+        {userRole === "MANAGER" || userRole === "ADMIN" ? (
+          <NavLink to="/create_survey">Создать новый опросник</NavLink>
+        ) : null}
+      </div>
     </div>
   );
-}
+};
+
+export default Dashboard;

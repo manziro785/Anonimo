@@ -11,6 +11,7 @@ import LayoutSideBar from "../components/general/LayoutSideBar";
 import Settings from "../pages/Settings.page/Settings.page";
 import Surveys from "../pages/Surveys.page/Surveys.page";
 import RegisterRoot from "../pages/Auth.page/Register/ChooseAccount/RegisterRoot";
+import CreateSurvey from "../pages/CreateSurvey.page/CreateSurvey.page";
 
 export const routers = createBrowserRouter([
   {
@@ -55,6 +56,11 @@ export const routers = createBrowserRouter([
     path: "/survey/:id",
     element: <LayoutSideBar />,
     children: [{ path: "", element: <Surveys /> }],
+  },
+  {
+    path: "/create_survey",
+    element: <LayoutSideBar />,
+    children: [{ path: "", element: <CreateSurvey /> }],
   },
   {
     path: "/*",

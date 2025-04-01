@@ -1,13 +1,38 @@
-import { NavLink } from "react-router-dom";
+import { useContext, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import StatsCounter from "../CounterBanner/StatsCounter.comp";
 import style from "./Banner.comp.module.css";
-
 import bg from "../../../assets/main_page/anonimo_bg.svg";
 import line from "../../../assets/main_page/LineBG.svg";
+import { AuthContext } from "../../../App";
 
 export default function Banner() {
+  const [showAlert, setShowAlert] = useState(false);
+  const [targetUrl, setTargetUrl] = useState("");
+  const [isAuth] = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  console.log("isAuth", isAuth);
+
+  const handleButtonClick = (e, target) => {
+    e.preventDefault();
+    if (isAuth) {
+      setTargetUrl(target);
+      setShowAlert(true); // Показываем алерт
+    } else {
+      navigate(target); // Если не авторизован, сразу идем на страницу
+    }
+  };
+
   return (
     <div>
+      {showAlert && (
+        <div className={style.alert_modal}>
+          <p>Вы уже авторизованы. Хотите перейти на дешборд?</p>
+          <button onClick={() => navigate("/dashboard")}>Да</button>
+          <button onClick={() => setShowAlert(false)}>Нет</button>
+        </div>
+      )}
       <div className={style.component}>
         <div className={style.left_side}>
           <div className={style.title}>
@@ -21,6 +46,7 @@ export default function Banner() {
           <div className={style.btns}>
             <NavLink
               to="/reg"
+              onClick={(e) => handleButtonClick(e, "/reg")}
               style={{
                 textDecoration: "none",
                 display: "flex",
@@ -32,6 +58,7 @@ export default function Banner() {
             </NavLink>
             <NavLink
               to="/login"
+              onClick={(e) => handleButtonClick(e, "/login")}
               style={{
                 textDecoration: "none",
                 display: "flex",
@@ -47,8 +74,8 @@ export default function Banner() {
           </div>
         </div>
         <div className={style.right_side}>
-          <img src={line} alt="" className={style.line} />
-          <img src={bg} alt="" className={style.bg_anonimo} />
+          <img src={line} alt="Line" className={style.line} />
+          <img src={bg} alt="Background" className={style.bg_anonimo} />
         </div>
       </div>
     </div>
