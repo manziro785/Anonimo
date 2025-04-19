@@ -1,170 +1,164 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import style from "../Dashboard.page/Dashboard.page.module.css";
 import axios from "axios";
-import {
-  Button,
-  TextInput,
-  Textarea,
-  Select,
-  Text,
-  Group,
-  Checkbox,
-} from "@mantine/core";
 import { UserContext } from "../../App";
+import style from "../Dashboard.page/Dashboard.page.module.css";
+import style_survey from "./CreateSurvey.module.css";
+import img_icon from "../../assets/common/icon (3).svg";
 
 const CreateSurvey = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [questions, setQuestions] = useState<any[]>([]); // Массив вопросов
+  const [questions, setQuestions] = useState<any[]>([]);
   const navigate = useNavigate();
   const [user] = useContext(UserContext);
 
-  // Добавить новый вопрос
   const handleAddQuestion = () => {
-    const newQuestion = {
-      type: "TEXT", // По умолчанию текстовый вопрос
-      text: "",
-      choices: [], // Для Multiple Choice будут варианты ответов
-    };
+    const newQuestion = { type: "TEXT", text: "", choices: [] };
     setQuestions([...questions, newQuestion]);
   };
 
   const handleQuestionTypeChange = (index: number, type: string) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[index].type = type;
-    setQuestions(updatedQuestions);
+    const updated = [...questions];
+    updated[index].type = type;
+    setQuestions(updated);
   };
 
   const handleQuestionTextChange = (index: number, text: string) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[index].text = text;
-    setQuestions(updatedQuestions);
+    const updated = [...questions];
+    updated[index].text = text;
+    setQuestions(updated);
   };
 
-  const handleChoiceChange = (
-    index: number,
-    choiceIndex: number,
-    value: string
-  ) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[index].choices[choiceIndex] = value;
-    setQuestions(updatedQuestions);
+  const handleChoiceChange = (qIdx: number, cIdx: number, value: string) => {
+    const updated = [...questions];
+    updated[qIdx].choices[cIdx] = value;
+    setQuestions(updated);
   };
 
   const handleAddChoice = (index: number) => {
-    const updatedQuestions = [...questions];
-    updatedQuestions[index].choices.push("");
-    setQuestions(updatedQuestions);
+    const updated = [...questions];
+    updated[index].choices.push("");
+    setQuestions(updated);
   };
 
   const handleSaveSurvey = () => {
-    if (!user.id) {
-      console.error("Ошибка: пользователь не найден");
-      return;
-    }
+    if (!user.username) return console.error("Нет пользователя");
 
     const surveyData = {
       title,
       description,
-      createdBy: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        role: user.role,
-        enabled: user.enabled,
-      },
-      questions: questions.map((q, index) => ({
-        id: 0, // Или убери, если сервер сам проставляет
+      createdBy: { username: user.username },
+      questions: questions.map((q) => ({
         text: q.text,
         type: q.type,
-        survey: null, // Если сервер ожидает null
-        answers: [], // Или передавать null
+        ...(q.type === "MULTIPLE_CHOICE" && {
+          options: q.choices.filter((c: string) => c.trim() !== ""),
+        }),
       })),
-      createdAt: new Date().toISOString(),
     };
 
-    console.log("Отправка опросника", surveyData);
-    console.log("Отправляемый JSON:", JSON.stringify(surveyData, null, 2));
-
-    console.log("Токен:", localStorage.getItem("access_token"));
-
     axios
-      .post("http://localhost:8080/api/v1/surveys/", surveyData, {
+      .post("http://localhost:8080/api/v1/surveys", surveyData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       })
-      .then((response) => {
-        console.log("Опросник сохранен:", response.data);
-        navigate("/dashboard");
-      })
-      .catch((error) => {
-        console.error("Ошибка при сохранении опросника:", error);
-      });
+      .then(() => navigate("/dashboard"))
+      .catch((err) => console.error("Ошибка:", err));
   };
 
   return (
-    <div>
-      <div className={style.container}>
-        <h1>Создание нового опросника</h1>
-        <TextInput
-          label="Название"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-        <Textarea
-          label="Описание"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+    <div className={style.container}>
+      <div className="survey-container" id={style_survey.container}>
+        {/* <h2>Создать опрос</h2> */}
+        <div>
+          <h3>Тема опросника</h3>
+          <input
+            className="input"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Введите название опросника"
+          />
+        </div>
+        <div>
+          <h3>Описание</h3>
+          <textarea
+            className="textarea"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Введите описание"
+          />
+        </div>
 
-        <h3>Вопросы:</h3>
-        {questions.map((question, index) => (
-          <div key={index}>
-            <TextInput
-              label={`Вопрос ${index + 1}`}
-              value={question.text}
-              onChange={(e) => handleQuestionTextChange(index, e.target.value)}
-            />
-
-            {/* Выбор типа вопроса */}
-            <Select
-              label="Тип вопроса"
-              value={question.type}
-              onChange={(value) => handleQuestionTypeChange(index, value!)}
-              data={[
-                { value: "TEXT", label: "Текст" },
-                { value: "MULTIPLE_CHOICE", label: "Множественный выбор" },
-              ]}
-            />
-
-            {/* Для вопросов типа Multiple Choice */}
-            {question.type === "MULTIPLE_CHOICE" && (
+        <h2>Вопросы:</h2>
+        <div className={style_survey.block}>
+          {questions.map((q, i) => (
+            <div className={style_survey.question_box} key={i}>
               <div>
-                <h4>Варианты ответов:</h4>
-                {question.choices.map((choice, choiceIndex) => (
-                  <Group key={choiceIndex}>
-                    <TextInput
-                      value={choice}
-                      onChange={(e) =>
-                        handleChoiceChange(index, choiceIndex, e.target.value)
-                      }
-                      label={`Вариант ${choiceIndex + 1}`}
-                    />
-                  </Group>
-                ))}
-                <Button onClick={() => handleAddChoice(index)}>
-                  Добавить вариант
-                </Button>
+                <label>{`Вопрос ${i + 1}`}</label>
+                <input
+                  className="input"
+                  value={q.text}
+                  onChange={(e) => handleQuestionTextChange(i, e.target.value)}
+                  placeholder="Введите вопрос"
+                />
               </div>
-            )}
-          </div>
-        ))}
+              <div>
+                <label>Тип вопроса</label>
+                <select
+                  className={style_survey.select}
+                  style={{ background: "none" }}
+                  value={q.type}
+                  onChange={(e) => handleQuestionTypeChange(i, e.target.value)}
+                >
+                  <option value="TEXT">Текст</option>
+                  <option value="MULTIPLE_CHOICE">Множественный выбор</option>
+                </select>
+              </div>
+              {q.type === "MULTIPLE_CHOICE" && (
+                <div className={style_survey.choices}>
+                  {/* <h4>Варианты ответов:</h4> */}
+                  {q.choices.map((c: string, j: number) => (
+                    <div className={style_survey.choice} key={j}>
+                      <img src={img_icon} alt="" />
+                      <input
+                        className={style_survey.input}
+                        value={c}
+                        placeholder={`Вариант ${j + 1}`}
+                        onChange={(e) =>
+                          handleChoiceChange(i, j, e.target.value)
+                        }
+                      />
+                    </div>
+                  ))}
 
-        <Button onClick={handleAddQuestion}>Добавить вопрос</Button>
-        <Button onClick={handleSaveSurvey}>Сохранить</Button>
+                  <button
+                    className={style_survey.btn_secondary}
+                    onClick={() => handleAddChoice(i)}
+                  >
+                    Добавить вариант
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className={style_survey.actions}>
+          <button
+            className={style_survey.btn_primary}
+            onClick={handleAddQuestion}
+          >
+            Добавить вопрос
+          </button>
+          <button
+            className={style_survey.btn_success}
+            onClick={handleSaveSurvey}
+          >
+            Сохранить опрос
+          </button>
+        </div>
       </div>
     </div>
   );

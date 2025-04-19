@@ -1,0 +1,84 @@
+#container input,
+textarea,
+select {
+  padding: 17px 25px;
+  background-color: #1a1e20;
+  border: 2px solid #dadadaaf;
+  outline: none;
+  font-size: 18px;
+  width: 100%;
+  margin-top: 0.5rem;
+  resize: vertical;
+  min-height: 60px;
+}
+
+#container h2 {
+  margin-bottom: 1rem;
+  /* background: none; */
+}
+
+.choices {
+  background: none;
+  padding-left: 3rem;
+}
+
+.choice {
+  background: none;
+  display: flex;
+}
+
+#container input::placeholder,
+textarea::placeholder {
+  color: #b3b8bc;
+}
+
+#container > div {
+  margin-bottom: 2rem;
+}
+
+.input,
+.textarea,
+.select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #444;
+  background-color: #2b2b2b;
+  color: white;
+  font-size: 14px;
+}
+
+.textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.question_box {
+  background-color: #1a1e20;
+  padding: 15px 2rem 15px 2rem;
+  /* border-radius: 8px; */
+  margin-bottom: 20px;
+  border: 2px solid #dadadaaf;
+}
+
+.question_box label {
+  font-weight: 600;
+}
+
+.question_box > div {
+  margin-bottom: 1rem;
+  background: none;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.block {
+  /* background: #00cc66;
+  border: 2px solid #dadadaaf; */
+  /* margin-left: 5rem; */
+}

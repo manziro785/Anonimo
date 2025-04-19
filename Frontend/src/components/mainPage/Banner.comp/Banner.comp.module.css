@@ -168,6 +168,44 @@
   z-index: 1000;
 }
 
+.alert_box {
+  background-color: #1c2023;
+  padding: 40px 30px;
+  border-radius: 10px;
+  text-align: center;
+  border: 1px solid #fff;
+  margin: 0 10px;
+  /* width: 400px; */
+}
+
+.alert_box p {
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.alert_box button {
+  background: linear-gradient(90deg, #1f8651, #0f8b3d);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1rem;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  width: 40%;
+  margin: 0 10px;
+  transition: all 0.3s ease;
+}
+
+.alert_box button:hover {
+  background: linear-gradient(90deg, #27a464, #14ae4c);
+}
+
 @media (min-width: 1872px) {
   .right_side::after {
     right: 20%;

@@ -46,17 +46,19 @@ h3 {
   background: none;
   display: flex;
   justify-content: space-around;
+  align-items: end;
   max-width: 1000px;
+  width: 100%;
   margin: 2rem auto;
-  padding-top: 3rem;
+  /* padding-top: 3rem; */
 }
 
 .value_auth div {
   background: none;
   display: flex;
   flex-direction: column;
-  width: 90%;
-  margin: 0 1rem;
+  width: 100%;
+  /* margin: 0 1rem; */
 }
 
 label {
@@ -74,10 +76,10 @@ label {
   color: #3a3939;
   border: 3px solid #21914c;
   outline: none;
-  margin: 10px;
+  margin: 10px 0 10px 0;
   font-size: 1rem;
   font-weight: 500;
-  /* width: 100%; */
+  width: 100%;
 }
 
 .value_auth input::placeholder {
@@ -92,7 +94,7 @@ label {
   }
 
   .value_auth div {
-    width: 95%;
+    width: 100%;
   }
 }
 
@@ -105,7 +107,7 @@ label {
   }
 
   .value_auth div {
-    width: 90%;
+    width: 100%;
   }
 
   .value_auth label {

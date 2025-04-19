@@ -24,7 +24,7 @@
 }
 
 .company_name {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   background: var(--green-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -66,6 +66,25 @@
 
 .btn:hover {
   background-position: 100% 0;
+}
+
+.btns {
+  display: flex;
+  gap: 10px;
+}
+
+.btn_delete {
+  background-color: #ffffff00;
+  border: 3px solid #237249;
+  color: #38b876;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn_delete:hover {
+  background-color: #2372492f;
 }
 
 @media (max-width: 1240px) {

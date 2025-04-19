@@ -6,6 +6,7 @@ import RegisterForm from "../../../../components/general/Register/RegisterForm.c
 import StepIndicator from "../../../../components/general/Register/StepIndicator.comp";
 import RoleSelector from "../../../../components/general/Register/RoleSelector.comp";
 import "../../common.style.css";
+import style from "./ChooseAccount.module.css";
 
 export default function RegisterRoot() {
   const navigate = useNavigate();
@@ -56,7 +57,7 @@ export default function RegisterRoot() {
 
       localStorage.setItem("user", JSON.stringify(userResponse.data)); // Сохраняем пользователя
       console.log("Пользователь сохранен:", localStorage.getItem("user"));
-
+      // setUser(response.data);
       navigate("/dashboard");
     } catch (err) {
       setError("Ошибка при регистрации");
@@ -74,12 +75,18 @@ export default function RegisterRoot() {
             text: "Далее",
             onClick: handleSubmit,
           },
-          prev: { link: "/", text: "Вернуться" },
-          relink: { link: "/login", text: "Уже есть аккаунт?" },
+          // prev: { link: "/", text: "Вернуться" },
+          // relink: { link: "/login", text: "Уже есть аккаунт?" },
         }}
       >
         <div className="main">
           <StepIndicator />
+          <div className="container_auth">
+            <h3 className="step_auth" id="h3_auth">
+              Заполните данные для регистрации
+            </h3>
+          </div>
+          <RoleSelector selected={selected} setSelected={setSelected} />
           <RegisterForm
             email={email}
             setEmail={setEmail}
@@ -90,15 +97,26 @@ export default function RegisterRoot() {
             username={username}
             setUsername={setUsername}
             error={error}
+            selectedRole={selected} // <== добавлено
           />
-          <RoleSelector selected={selected} setSelected={setSelected} />
-          <button
-            className="next_btn"
-            onClick={handleSubmit}
-            disabled={loading}
-          >
-            {loading ? "Загружается..." : "Зарегистрироваться"}
-          </button>
+          <div className={style.wrapp_button_auth}>
+            <button
+              className={style.button_auth}
+              onClick={handleSubmit}
+              disabled={loading}
+            >
+              {loading ? "Загружается..." : "Зарегистрироваться"}
+            </button>
+            <div className={style.relink_btn}>
+              <a
+                href="/login"
+                className={style.relink_btn}
+                style={{ background: "none" }}
+              >
+                Уже есть аккаунт?
+              </a>
+            </div>
+          </div>
         </div>
       </AuthLayout>
     </div>

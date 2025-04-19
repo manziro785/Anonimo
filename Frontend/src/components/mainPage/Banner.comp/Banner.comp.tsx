@@ -28,9 +28,11 @@ export default function Banner() {
     <div>
       {showAlert && (
         <div className={style.alert_modal}>
-          <p>Вы уже авторизованы. Хотите перейти на дешборд?</p>
-          <button onClick={() => navigate("/dashboard")}>Да</button>
-          <button onClick={() => setShowAlert(false)}>Нет</button>
+          <div className={style.alert_box}>
+            <p>Вы уже авторизованы. Хотите перейти на дешборд?</p>
+            <button onClick={() => navigate("/dashboard")}>Да</button>
+            <button onClick={() => setShowAlert(false)}>Нет</button>
+          </div>
         </div>
       )}
       <div className={style.component}>
@@ -45,8 +47,8 @@ export default function Banner() {
           </div>
           <div className={style.btns}>
             <NavLink
-              to="/reg"
-              onClick={(e) => handleButtonClick(e, "/reg")}
+              to="/register"
+              onClick={(e) => handleButtonClick(e, "/register")}
               style={{
                 textDecoration: "none",
                 display: "flex",

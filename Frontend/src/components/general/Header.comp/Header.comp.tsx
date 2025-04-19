@@ -28,7 +28,11 @@ export default function Header() {
                 key={item.link}
                 onClick={() => scrollToSection(item.direction)}
               >
-                <NavLink to={item.link} id={style.btn}>
+                <NavLink
+                  to={item.link}
+                  id={style.btn}
+                  style={{ background: "none" }}
+                >
                   {item.value}
                 </NavLink>
               </div>

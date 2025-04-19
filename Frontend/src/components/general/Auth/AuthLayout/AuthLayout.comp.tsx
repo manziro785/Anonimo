@@ -27,7 +27,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
         <div className={style.container}>
           <h2 className={style.title}>{title}</h2>
           {children}
-          <div className={style.btns}>
+          {/* <div className={style.btns}>
             <NavLink
               to={buttons.prev.link}
               className={style.btn}
@@ -49,7 +49,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
               {buttons.next.text}
               <img src={right} className={style.right_img} alt="" />
             </NavLink>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
