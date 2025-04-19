@@ -1,4 +1,4 @@
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import style from "./Sidebar.module.css";
 import img1 from "../../../assets/sidebar/img_sidebar1.svg";
 import img2 from "../../../assets/sidebar/img_sidebar2.svg";
@@ -6,12 +6,13 @@ import img3 from "../../../assets/sidebar/img_sidebar3.svg";
 import { useEffect, useRef, useState } from "react";
 
 export default function Sidebar() {
-  const location = useLocation();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
-  const chatRef = useRef(null);
 
   const chats = [{ name: "chat1" }, { name: "chat2" }, { name: "chat3" }];
+
+  // Указываем тип для chatRef
+  const chatRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (chatRef.current) {
@@ -21,9 +22,10 @@ export default function Sidebar() {
     }
   }, [isOpen]);
 
-  const handleChatClick = (chatName) => {
-    navigate(`/survey/${chatName}`); // Теперь используется chatName
-  };
+  // Указываем тип для параметра
+  // const handleChatClick = (chatName: string) => {
+  //   navigate(`/survey/${chatName}`);
+  // };
 
   return (
     <div className={style.container}>
@@ -54,7 +56,7 @@ export default function Sidebar() {
                 {chats.map((chat) => (
                   <NavLink
                     key={chat.name}
-                    to={`/survey/${chat.name}`} // Используем название вместо ID
+                    to={`/survey/${chat.name}`}
                     className={({ isActive }) =>
                       `${style.a_chats} ${isActive ? style.active : ""}`
                     }

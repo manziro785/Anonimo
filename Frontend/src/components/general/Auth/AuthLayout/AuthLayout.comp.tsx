@@ -1,15 +1,19 @@
 import React, { ReactNode } from "react";
 import style from "./AuthLayout.module.css";
 import bg_lines from "../../../../assets/auth/lines.svg";
-import left from "../../../../assets/auth/left.svg";
-import right from "../../../../assets/auth/right.svg";
-import { NavLink } from "react-router-dom";
+// import left from "../../../../assets/auth/left.svg";
+// import right from "../../../../assets/auth/right.svg";
+// import { NavLink } from "react-router-dom";
 
 interface AuthLayoutProps {
   children: ReactNode;
   title: string;
   buttons: {
-    next: { link: string; text: string };
+    next: {
+      text: string;
+      onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void; // Сделаем onClick необязательным
+      link?: string; // Добавляем link как опцию
+    };
     prev: { link: string; text: string };
     relink: { link: string; text: string };
   };
@@ -17,7 +21,7 @@ interface AuthLayoutProps {
 
 const AuthLayout: React.FC<AuthLayoutProps> = ({
   children,
-  buttons,
+  // buttons,
   title,
 }) => {
   return (

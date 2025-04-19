@@ -15,7 +15,7 @@ const QuestionCard: React.FC<DashboardProps> = ({
   info,
   date,
   title,
-  company_name,
+  // company_name,
   onDelete,
 }) => {
   const [userRole, setUserRole] = useState<string>("");

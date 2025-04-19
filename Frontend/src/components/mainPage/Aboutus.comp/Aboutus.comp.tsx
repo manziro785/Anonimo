@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import style from "./Aboutus.comp.module.css";
-import logo from "../../../assets/common/logo_main.svg";
+// import logo from "../../../assets/common/logo_main.svg";
 
 import eldar from "../../../assets/team_imgs/photo_2025-02-17_15-25-01.jpg";
 import tilek from "../../../assets/team_imgs/photo_2025-02-05_20-11-37.jpg";

@@ -1,6 +1,19 @@
 import style from "../../../pages/Auth.page/Register/ChooseAccount/ChooseAccount.module.css";
 import "../../../pages/Auth.page/common.style.css";
 
+type Props = {
+  email: string;
+  setEmail: (val: string) => void;
+  password: string;
+  setPassword: (val: string) => void;
+  confirmPassword: string;
+  setConfirmPassword: (val: string) => void;
+  username: string;
+  setUsername: (val: string) => void;
+  error?: string;
+  selectedRole: string;
+};
+
 export default function RegisterForm({
   email,
   setEmail,
@@ -12,7 +25,7 @@ export default function RegisterForm({
   setUsername,
   error,
   selectedRole,
-}) {
+}: Props) {
   return (
     <div className="container_auth">
       <div className="value_auth">

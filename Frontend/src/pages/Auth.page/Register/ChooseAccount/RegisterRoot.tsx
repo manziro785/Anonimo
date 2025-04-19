@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Для редиректа
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AuthLayout from "../../../../components/general/Auth/AuthLayout/AuthLayout.comp";
 import RegisterForm from "../../../../components/general/Register/RegisterForm.comp";
@@ -10,7 +10,7 @@ import style from "./ChooseAccount.module.css";
 
 export default function RegisterRoot() {
   const navigate = useNavigate();
-  const [selected, setSelected] = useState("MANAGER");
+  const [selected, setSelected] = useState<"MANAGER" | "USER">("MANAGER");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -21,12 +21,12 @@ export default function RegisterRoot() {
   useEffect(() => {
     const token = localStorage.getItem("access_token");
     if (token) {
-      console.log("/dashboard"); // Если пользователь уже авторизован, перенаправляем
+      console.log("/dashboard");
     }
   }, [navigate]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    // e.preventDefault();
     if (password !== confirmPassword) {
       setError("Пароли не совпадают");
       return;
@@ -48,16 +48,14 @@ export default function RegisterRoot() {
 
       localStorage.setItem("access_token", response.data.token);
 
-      // Загружаем профиль пользователя
       axios.defaults.headers.common["Authorization"] =
         `Bearer ${response.data.token}`;
       const userResponse = await axios.get(
         "http://localhost:8080/api/v1/users/me"
       );
 
-      localStorage.setItem("user", JSON.stringify(userResponse.data)); // Сохраняем пользователя
+      localStorage.setItem("user", JSON.stringify(userResponse.data));
       console.log("Пользователь сохранен:", localStorage.getItem("user"));
-      // setUser(response.data);
       navigate("/dashboard");
     } catch (err) {
       setError("Ошибка при регистрации");
@@ -68,15 +66,23 @@ export default function RegisterRoot() {
   return (
     <div style={{ background: "none" }}>
       <AuthLayout
-        title="Регистрация"
+        title="Register"
         buttons={{
           next: {
-            link: "#",
-            text: "Далее",
-            onClick: handleSubmit,
+            text: "Next",
+            onClick: async () => {
+              // Handle the next button click
+            },
+            link: "/next-step", // Optional link
           },
-          // prev: { link: "/", text: "Вернуться" },
-          // relink: { link: "/login", text: "Уже есть аккаунт?" },
+          prev: {
+            link: "/previous-step",
+            text: "Previous",
+          },
+          relink: {
+            link: "/relink",
+            text: "Relink",
+          },
         }}
       >
         <div className="main">
@@ -97,7 +103,7 @@ export default function RegisterRoot() {
             username={username}
             setUsername={setUsername}
             error={error}
-            selectedRole={selected} // <== добавлено
+            selectedRole={selected}
           />
           <div className={style.wrapp_button_auth}>
             <button

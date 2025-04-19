@@ -8,7 +8,7 @@ export default function Header() {
     { value: "Контакты", link: "/", direction: "contacts" },
   ];
 
-  const scrollToSection = (id) => {
+  const scrollToSection = (id: string) => {
     const section = document.getElementById(id);
     if (section) {
       section.scrollIntoView({ behavior: "smooth" });

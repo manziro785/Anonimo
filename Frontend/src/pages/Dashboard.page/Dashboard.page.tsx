@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import style from "./Dashboard.page.module.css";
 import style_alert from "../../components/mainPage/Banner.comp/Banner.comp.module.css";
 import axios from "axios";

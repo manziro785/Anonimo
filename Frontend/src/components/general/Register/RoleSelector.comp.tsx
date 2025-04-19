@@ -1,7 +1,12 @@
 import style from "../../../pages/Auth.page/Register/ChooseAccount/ChooseAccount.module.css";
 import "../../../pages/Auth.page/common.style.css";
 
-export default function RoleSelector({ selected, setSelected }) {
+type Props = {
+  selected: "MANAGER" | "USER";
+  setSelected: (role: "MANAGER" | "USER") => void;
+};
+
+export default function RoleSelector({ selected, setSelected }: Props) {
   return (
     <div className={style.container}>
       <label className={style.radio_container}>

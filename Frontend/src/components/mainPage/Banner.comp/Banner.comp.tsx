@@ -8,16 +8,15 @@ import { AuthContext } from "../../../App";
 
 export default function Banner() {
   const [showAlert, setShowAlert] = useState(false);
-  const [targetUrl, setTargetUrl] = useState("");
   const [isAuth] = useContext(AuthContext);
   const navigate = useNavigate();
 
-  console.log("isAuth", isAuth);
-
-  const handleButtonClick = (e, target) => {
+  const handleButtonClick = (
+    e: React.MouseEvent<HTMLAnchorElement>, // Типизация события
+    target: string // Типизация параметра
+  ) => {
     e.preventDefault();
     if (isAuth) {
-      setTargetUrl(target);
       setShowAlert(true); // Показываем алерт
     } else {
       navigate(target); // Если не авторизован, сразу идем на страницу

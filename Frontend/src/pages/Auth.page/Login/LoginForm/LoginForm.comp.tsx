@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import style from "./LoginForm.module.css";
@@ -8,8 +8,13 @@ import style_auth from "../../../../components/general/Auth/AuthHeader/AuthHeade
 import { useContext } from "react";
 import { AuthContext, UserContext } from "../../../../App";
 
+interface User {
+  username: string;
+  role: string;
+}
+
 export default function LoginForm() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null); // Указываем тип User или null
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

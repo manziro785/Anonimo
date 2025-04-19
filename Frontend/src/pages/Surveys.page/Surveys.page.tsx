@@ -2,14 +2,27 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import style from "./Surveys.module.css";
 
+interface Question {
+  id: string;
+  type: string;
+  text: string;
+  options?: string[];
+}
+
+interface Survey {
+  id: string;
+  title: string;
+  questions: Question[];
+}
+
 export default function SurveyPage() {
   let { id } = useParams();
-  const [survey, setSurvey] = useState(null);
+  const [survey, setSurvey] = useState<Survey | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [responses, setResponses] = useState({});
+  const [error, setError] = useState<string | null>(null);
+  const [responses, setResponses] = useState<{ [key: string]: string }>({});
 
-  const mockSurveys = [
+  const mockSurveys: Survey[] = [
     {
       id: "survey1",
       title: "Опрос по разработке",
@@ -58,7 +71,7 @@ export default function SurveyPage() {
     }, 1000);
   }, [id]);
 
-  const handleChange = (questionId, value) => {
+  const handleChange = (questionId: string, value: string) => {
     setResponses((prev) => ({ ...prev, [questionId]: value }));
   };
 
@@ -83,7 +96,7 @@ export default function SurveyPage() {
             </p>
             <p>{q.text}</p>
             {q.type === "radio" ? (
-              q.options.map((option) => (
+              q.options?.map((option) => (
                 <label key={option}>
                   <input
                     type="radio"

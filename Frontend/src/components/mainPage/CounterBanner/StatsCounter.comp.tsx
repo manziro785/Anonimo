@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import style from "./StatsCounter.module.css";
 
+// Интерфейс для пропсов компонента Counter
+interface CounterProps {
+  value: number;
+  text: string;
+}
+
 export default function StatsCounter() {
   const stats = [
     { id: 1, value: 10, text: "Компании в Системе" },
@@ -17,7 +23,8 @@ export default function StatsCounter() {
   );
 }
 
-function Counter({ value, text }) {
+// Указание типов пропсов для компонента Counter
+function Counter({ value, text }: CounterProps) {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
