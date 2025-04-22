@@ -11,6 +11,8 @@ export default function MainPage() {
         <div className="container_wrapper">
           <Banner />
           <Analise />
+          {/* <Aboutus />
+          <Aboutus /> */}
           <Aboutus />
         </div>
       </Template>

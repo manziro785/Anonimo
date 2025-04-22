@@ -6,28 +6,31 @@ import { NavLink } from "react-router-dom";
 import QuestionCard from "../../components/general/dashboard/questionCard/questionCard.comp";
 import img1_icon from "../../assets/dashboard/Group 189.svg";
 import img2_icon from "../../assets/dashboard/Group 190.svg";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [surveys, setSurveys] = useState<any[]>([]); // Начальное состояние — пустой массив
   const [userRole, setUserRole] = useState<string>("");
   const [showAlert, setShowAlert] = useState(false); // Для показа модального окна
   const [surveyToDelete, setSurveyToDelete] = useState<number | null>(null); // ID опросника для удаления
+  const navigate = useNavigate();
 
+  const handleStartSurvey = (id: number) => {
+    navigate(`/survey/${id}`);
+  };
   useEffect(() => {
     const token = localStorage.getItem("access_token");
 
     if (token) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-      // Запрос к /users/me
       axios
         .get("http://localhost:8080/api/v1/users/me")
         .then((res) => {
-          const role = res.data.role; // Предположим, что роль в поле role
+          const role = res.data.role;
           setUserRole(role);
           console.log("Роль пользователя:", role);
 
-          // Затем получаем опросники
           return axios.get("http://localhost:8080/api/v1/surveys");
         })
         .then((response) => {
@@ -104,6 +107,7 @@ const Dashboard = () => {
                   date={new Date(survey.createdAt).toLocaleDateString("ru-RU")}
                   company_name={survey.companyName || "Без названия"}
                   onDelete={handleDeleteSurvey}
+                  onStart={userRole === "USER" ? handleStartSurvey : undefined}
                 />
               ))
             ) : (

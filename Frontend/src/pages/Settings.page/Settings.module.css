@@ -1,8 +1,13 @@
 .container {
   margin-left: 290px;
-  padding: 3rem 4rem 0 4rem;
+  padding: 3rem 5rem 0 5rem;
   /* display: flex; */
   /* width: 100% !important; */
+}
+
+.logo_icon {
+  display: flex;
+  align-items: center;
 }
 
 .container * {
@@ -14,30 +19,90 @@
   border: 1px solid;
   border-image: linear-gradient(to right, #dadada, #99999988, #dadada) 1;
   margin-bottom: 1.5rem;
-  padding: 1.8rem 2rem;
+  padding: 1.8rem 3rem;
   display: flex;
   min-height: 10rem;
 }
 
+.info h2 {
+  font-size: 2.4rem;
+  margin-bottom: 1rem;
+}
+
+.up_side {
+  color: #969696;
+  font-weight: 400;
+  font-size: 1.1rem;
+}
+
+.value {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: -5px;
+}
+
+.info > div {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.block > div {
+  flex-direction: column;
+  display: flex;
+  align-items: start;
+  margin-bottom: 1rem;
+}
+
+.block {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  margin-right: 5rem;
+}
+
 .info {
-  margin-left: 2rem;
+  margin-left: 6rem;
+  width: 60%;
 }
 
-.nickname {
-  font-size: 2rem;
-  font-weight: 700;
+.btn_del_account {
+  border-radius: 5px;
+  height: fit-content;
+  padding: 10px 30px;
+  outline: none;
+  background-color: #2372490e;
+  border: 3px solid #23724989;
+  color: #e2e2e2;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
 }
 
-.company_name {
-  font-size: 1.2rem;
-  margin-top: 1rem;
+.btn_del_account:hover {
+  background-color: #23724930;
 }
 
-.company_name img {
-  margin-right: 0.5rem;
+.btn_change_info {
+  border-radius: 5px;
+  border: none;
+  height: fit-content;
+  padding: 10px 30px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  background: linear-gradient(90deg, #237249, #35c66b);
+  background-size: 200% 100%;
+  transition: background-position 0.3s ease-in-out;
+  z-index: 3;
+  cursor: pointer;
 }
 
-.logo_icon {
+.btn_change_info:hover {
+  background-position: 100% 0;
+}
+
+.btn_del_account .logo_icon {
   display: flex;
   align-items: center;
 }

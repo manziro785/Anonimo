@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import style from "./questionCard.module.css";
+import { UserContext } from "../../../../App";
 
 interface DashboardProps {
   id: number;
@@ -7,7 +8,8 @@ interface DashboardProps {
   info: string;
   date: string;
   company_name: string;
-  onDelete: (id: number) => void;
+  onDelete?: (id: number) => void;
+  onStart?: (id: number) => void;
 }
 
 const QuestionCard: React.FC<DashboardProps> = ({
@@ -17,13 +19,10 @@ const QuestionCard: React.FC<DashboardProps> = ({
   title,
   // company_name,
   onDelete,
+  onStart,
 }) => {
-  const [userRole, setUserRole] = useState<string>("");
-
-  useEffect(() => {
-    const role = "MANAGER";
-    setUserRole(role);
-  }, []);
+  const [user] = useContext(UserContext); // получаем данные о пользователе из контекста
+  const userRole = user.role;
 
   return (
     <div>
@@ -40,13 +39,18 @@ const QuestionCard: React.FC<DashboardProps> = ({
           {userRole === "MANAGER" || userRole === "ADMIN" ? (
             <div className={style.btns}>
               <div className={style.btn}>Результаты</div>
-              <button className={style.btn_delete} onClick={() => onDelete(id)}>
+              <button
+                className={style.btn_delete}
+                onClick={() => onDelete?.(id)}
+              >
                 Удалить
               </button>
             </div>
-          ) : (
-            <div className={style.btn}>Начать опросник</div>
-          )}
+          ) : userRole === "USER" ? (
+            <div className={style.btn} onClick={() => onStart?.(id)}>
+              Начать опросник
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
