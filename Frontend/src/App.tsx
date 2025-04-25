@@ -23,8 +23,10 @@ const App = () => {
   useEffect(() => {
     const token = localStorage.getItem("access_token");
     console.log("Токен при запуске:", token); // Для отладки
+    if (!token) {
+      return;
+    }
 
-    if (!token) return;
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
     axios

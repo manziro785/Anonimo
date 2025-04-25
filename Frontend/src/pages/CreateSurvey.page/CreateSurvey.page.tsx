@@ -19,6 +19,10 @@ const CreateSurvey = () => {
   const navigate = useNavigate();
   const [user] = useContext(UserContext);
 
+  if (!user || Object.keys(user).length === 0) {
+    return <div>Загрузка пользователя...</div>;
+  }
+
   const handleAddQuestion = () => {
     const newQuestion = { type: "TEXT", text: "", choices: [] };
     setQuestions([...questions, newQuestion]);
@@ -108,6 +112,8 @@ const CreateSurvey = () => {
       })),
     };
 
+    console.log(surveyData);
+
     axios
       .post("http://localhost:8080/api/v1/surveys", surveyData, {
         headers: {
@@ -115,6 +121,7 @@ const CreateSurvey = () => {
         },
       })
       .then(() => navigate("/dashboard"))
+      .then(() => console.log(surveyData))
       .catch((err) => console.error("Ошибка:", err));
   };
 

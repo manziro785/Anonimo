@@ -1,17 +1,24 @@
 import style from "./Settings.module.css";
 import icon from "../../assets/common/AnonimoIcon.svg";
-// import img_icon from "../../assets/sidebar/img_icon.svg";
 import { useNavigate } from "react-router-dom";
-import { AuthContext, UserContext } from "../../App"; // путь может отличаться
-import { useContext, useEffect } from "react";
+import { AuthContext, UserContext } from "../../App";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import Modal from "../../components/general/Settings/Modal/Modal";
 
 export default function Settings() {
-  // const company_name = "KarakolStroy.kg";
   const navigate = useNavigate();
 
   const [_, setIsAuth] = useContext(AuthContext);
   const [user, setUser] = useContext(UserContext);
+
+  // Состояние для управления открытием/закрытием модального окна
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newUsername, setNewUsername] = useState(user.username);
+  const [newManagerCode, setNewManagerCode] = useState(user.managerCode);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordMatchError, setPasswordMatchError] = useState("");
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
@@ -22,8 +29,6 @@ export default function Settings() {
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
-    console.log("Токен в сеттингс ", token);
-
     if (!token) return;
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
@@ -32,7 +37,6 @@ export default function Settings() {
       .then((res) => {
         setIsAuth(true);
         setUser(res.data);
-        console.log(res.data);
       })
       .catch((error) => {
         console.error("Ошибка при получении профиля пользователя:", error);
@@ -42,6 +46,41 @@ export default function Settings() {
         }
       });
   }, []);
+
+  const handleChangeInfo = () => {
+    if (newPassword !== confirmPassword) {
+      setPasswordMatchError("Пароли не совпадают");
+      return;
+    }
+    const token = localStorage.getItem("access_token");
+
+    if (!token) {
+      console.error("Нет токена, данные не могут быть обновлены");
+      return;
+    }
+
+    axios
+      .put(
+        "http://localhost:8080/api/v1/users/me", // Поменяй на реальный эндпоинт для изменения данных
+        {
+          username: newUsername,
+          managerCode: newManagerCode,
+          password: newPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        setUser(res.data);
+        setIsModalOpen(false); // Закрываем модальное окно после успешного обновления
+      })
+      .catch((error) => {
+        console.error("Ошибка при изменении данных:", error);
+      });
+  };
 
   return (
     <div>
@@ -77,28 +116,82 @@ export default function Settings() {
               </div>
             </div>
             <div className={style.btns}>
-              <div className={style.btn_change_info}>Изменить данные</div>
+              <div
+                className={style.btn_change_info}
+                onClick={() => setIsModalOpen(true)} // Открытие модального окна
+              >
+                Изменить данные
+              </div>
               <div className={style.btn_del_account} onClick={handleLogout}>
                 Выйти из аккаунта
               </div>
             </div>
-            {/* <div className={style.nickname}>{user.username}</div>
-            <div className={style.nickname}>{user.email}</div>
-            <div className={style.nickname}>{user.managerCode}</div>
-            <div className={style.nickname}>{user.role}</div>
-
-            <div className={style.company_name}>
-              <img src={img_icon} alt="" />
-              {company_name}
-            </div>
-            <div className={style.logoutContainer}>
-              <button className={style.logoutButton} onClick={handleLogout}>
-                Выйти из аккаунта
-              </button>
-            </div> */}
           </div>
         </div>
       </div>
+
+      {isModalOpen && (
+        <Modal onClose={() => setIsModalOpen(false)}>
+          <div className={style.modal_content}>
+            <h3>Изменить данные</h3>
+            <div className={style.content_settings}>
+              <div>
+                <label>
+                  Юзернейм:
+                  <input
+                    type="text"
+                    value={newUsername}
+                    onChange={(e) => setNewUsername(e.target.value)}
+                  />
+                </label>
+                <label>
+                  Код менеджера:
+                  <input
+                    type="text"
+                    value={newManagerCode}
+                    onChange={(e) => setNewManagerCode(e.target.value)}
+                  />
+                </label>
+              </div>
+              <div>
+                <label>
+                  Новый пароль:
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                  />
+                </label>
+                <label>
+                  Подтверждение пароля:
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                </label>
+              </div>
+            </div>
+            {passwordMatchError && (
+              <div style={{ color: "red" }}>{passwordMatchError}</div>
+            )}
+            <div className={style.modal_buttons}>
+              <button
+                className={style.btn_del_account}
+                onClick={handleChangeInfo}
+              >
+                Сохранить
+              </button>
+              <button
+                className={style.btn_del_account}
+                onClick={() => setIsModalOpen(false)}
+              >
+                Закрыть
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }

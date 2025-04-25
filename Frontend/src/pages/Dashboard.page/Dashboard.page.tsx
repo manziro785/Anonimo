@@ -13,6 +13,7 @@ const Dashboard = () => {
   const [userRole, setUserRole] = useState<string>("");
   const [showAlert, setShowAlert] = useState(false); // Для показа модального окна
   const [surveyToDelete, setSurveyToDelete] = useState<number | null>(null); // ID опросника для удаления
+  const [isLoading, setIsLoading] = useState(true); // добавим
   const navigate = useNavigate();
 
   const handleStartSurvey = (id: number) => {
@@ -29,20 +30,22 @@ const Dashboard = () => {
         .then((res) => {
           const role = res.data.role;
           setUserRole(role);
-          console.log("Роль пользователя:", role);
 
           return axios.get("http://localhost:8080/api/v1/surveys");
         })
         .then((response) => {
           if (Array.isArray(response.data)) {
             setSurveys(response.data);
-          } else {
-            console.error("Опросники не в виде массива:", response.data);
           }
         })
         .catch((error) => {
           console.error("Ошибка:", error);
+        })
+        .finally(() => {
+          setIsLoading(false); // теперь точно загрузка завершена
         });
+    } else {
+      setIsLoading(false); // если нет токена, тоже завершаем загрузку
     }
   }, []);
 
@@ -68,6 +71,13 @@ const Dashboard = () => {
         });
     }
   };
+  if (isLoading) {
+    return (
+      <div className={style.container}>
+        <p>Загрузка...</p>
+      </div>
+    );
+  }
 
   return (
     <div>

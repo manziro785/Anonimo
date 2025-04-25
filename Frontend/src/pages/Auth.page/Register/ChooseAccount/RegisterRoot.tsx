@@ -23,7 +23,7 @@ export default function RegisterRoot() {
     if (token) {
       console.log("/dashboard");
     }
-  }, [navigate]);
+  }, []);
 
   const handleSubmit = async () => {
     // e.preventDefault();
@@ -49,7 +49,7 @@ export default function RegisterRoot() {
       localStorage.setItem("access_token", response.data.token);
 
       axios.defaults.headers.common["Authorization"] =
-        `Bearer ${response.data.token}`;
+        `Bearer ${response?.data?.token}`;
       const userResponse = await axios.get(
         "http://localhost:8080/api/v1/users/me"
       );
@@ -66,7 +66,7 @@ export default function RegisterRoot() {
   return (
     <div style={{ background: "none" }}>
       <AuthLayout
-        title="Register"
+        title="Регистрация"
         buttons={{
           next: {
             text: "Next",
