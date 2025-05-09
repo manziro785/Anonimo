@@ -1,7 +1,8 @@
 .container,
 .container_wrapper,
 .nav,
-.item {
+.item,
+.logo {
   background: none !important;
 }
 

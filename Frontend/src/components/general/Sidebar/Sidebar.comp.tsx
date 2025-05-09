@@ -11,7 +11,6 @@ export default function Sidebar() {
 
   const chats = [{ name: "chat1" }, { name: "chat2" }, { name: "chat3" }];
 
-  // Указываем тип для chatRef
   const chatRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -44,12 +43,13 @@ export default function Sidebar() {
           </li>
           <li onClick={() => setIsOpen(!isOpen)}>
             <div className={style.chat_wrapper}>
-              <NavLink to="#">
+              {/* чаты ---------- */}
+              {/* <NavLink to="#">
                 <div className={style.li_wrap}>
                   <img src={img2} alt="" /> Чаты
                 </div>
-              </NavLink>
-              <div
+              </NavLink> */}
+              {/* <div
                 ref={chatRef}
                 className={`${style.chat_container} ${isOpen ? style.open : ""}`}
               >
@@ -64,7 +64,7 @@ export default function Sidebar() {
                     <p>{chat.name}</p>
                   </NavLink>
                 ))}
-              </div>
+              </div> */}
             </div>
           </li>
           <li>
@@ -72,7 +72,7 @@ export default function Sidebar() {
               to="/settings"
               className={({ isActive }) => (isActive ? style.active : "")}
             >
-              <img src={img3} alt="" /> Настройки
+              <img src={img3} alt="" /> Профиль
             </NavLink>
           </li>
         </ul>

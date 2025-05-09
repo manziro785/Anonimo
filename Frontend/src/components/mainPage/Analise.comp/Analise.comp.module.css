@@ -14,7 +14,7 @@
   width: 140%;
   height: 100vh;
   z-index: 1;
-  top: 20%;
+  top: 40%;
 }
 
 .container {
@@ -22,7 +22,7 @@
   justify-content: space-between;
   align-items: start;
   margin-top: 10rem;
-  position: relative;
+  /* position: relative; */
 }
 
 .right_side {

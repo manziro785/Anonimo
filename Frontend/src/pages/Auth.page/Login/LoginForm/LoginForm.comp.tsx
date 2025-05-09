@@ -14,18 +14,44 @@ interface User {
 }
 
 export default function LoginForm() {
-  const [user, setUser] = useState<User | null>(null); // Указываем тип User или null
+  const [user, setUser] = useState<User | null>(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [commonError, setCommonError] = useState("");
   const navigate = useNavigate();
 
   const [, setIsAuth] = useContext(AuthContext);
   const [, setUserContext] = useContext(UserContext);
 
+  const validate = () => {
+    let isValid = true;
+
+    if (!username.trim()) {
+      setUsernameError("Пожалуйста, введите юзернейм");
+      isValid = false;
+    } else {
+      setUsernameError("");
+    }
+
+    if (!password.trim()) {
+      setPasswordError("Пожалуйста, введите пароль");
+      isValid = false;
+    } else {
+      setPasswordError("");
+    }
+
+    return isValid;
+  };
+
   const handleLogin = async () => {
+    if (!validate()) {
+      return;
+    }
+
     try {
-      setError("");
+      setCommonError("");
       const authResponse = await axios.post(
         "http://localhost:8080/api/v1/auth/authenticate",
         { username, password },
@@ -33,7 +59,7 @@ export default function LoginForm() {
       );
 
       const token = authResponse.data.token;
-      localStorage.setItem("access_token", token); // сохраняем как access_token
+      localStorage.setItem("access_token", token);
 
       const userResponse = await axios.get(
         "http://localhost:8080/api/v1/users/me",
@@ -43,13 +69,13 @@ export default function LoginForm() {
       );
 
       const userData = userResponse.data;
-      setUser(userData); // локально (если надо)
-      setUserContext(userData); // глобально
-      setIsAuth(true); // глобально
-      navigate("/dashboard"); // редирект на главную
+      setUser(userData);
+      setUserContext(userData);
+      setIsAuth(true);
+      navigate("/dashboard");
     } catch (error) {
       console.error("Ошибка входа:", error);
-      setError("Неверные данные. Попробуйте снова.");
+      setCommonError("Неверные данные. Попробуйте снова.");
     }
   };
 
@@ -69,35 +95,51 @@ export default function LoginForm() {
               <span className={style_auth.stepText_login}>Вход в систему</span>
             </div>
           </div>
+
           <div className="container_auth">
             <h3 className="step_auth" id="h3_auth">
-              Войдите в свой аккаунт{" "}
+              Войдите в свой аккаунт
             </h3>
           </div>
+
           <div className="value_auth">
             <div id={style.box_auth}>
               <div id={style.form_auth}>
                 <div>
                   <label>Юзернейм</label>
                   <input
-                    type="email"
+                    type="text"
                     placeholder="Введите свой юзернейм"
                     value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    onChange={(e) => {
+                      setUsername(e.target.value);
+                      setUsernameError("");
+                    }}
                   />
+                  {usernameError && <p className="error">{usernameError}</p>}
                 </div>
+
                 <div>
                   <label>Пароль</label>
                   <input
                     type="password"
                     placeholder="Введите пароль"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      setPasswordError("");
+                    }}
                   />
+                  {passwordError && <p className="error">{passwordError}</p>}
                 </div>
               </div>
 
-              {error && <p style={{ color: "red" }}>{error}</p>}
+              {commonError && (
+                <p style={{ color: "red", textAlign: "center" }}>
+                  {commonError}
+                </p>
+              )}
+
               <div className={style.wrapp_button_auth}>
                 <button className={style.button_auth} onClick={handleLogin}>
                   Войти
@@ -108,19 +150,12 @@ export default function LoginForm() {
                     className={style.relink_btn}
                     style={{ background: "none", textAlign: "center" }}
                   >
-                    Уже есть аккаунт?
+                    Все еще нет аккаунта?
                   </a>
                 </div>
               </div>
             </div>
           </div>
-          {user && (
-            <div className="user-info">
-              <h3>Добро пожаловать, {user.username}!</h3>
-              <p>Email: {user.username}</p>
-              <p>Роль: {user.role}</p>
-            </div>
-          )}
         </div>
       </AuthLayout>
     </div>

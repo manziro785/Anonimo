@@ -190,6 +190,13 @@ textarea::placeholder {
   z-index: 3;
 }
 
+.error_message {
+  color: #ff4d4f;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
 .btn_success:hover {
   background-position: 100% 0;
 }

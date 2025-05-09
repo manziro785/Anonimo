@@ -17,6 +17,9 @@ export default function RegisterRoot() {
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [validateForm, setValidateForm] = useState<() => boolean>(
+    () => () => true
+  );
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
@@ -70,10 +73,8 @@ export default function RegisterRoot() {
         buttons={{
           next: {
             text: "Next",
-            onClick: async () => {
-              // Handle the next button click
-            },
-            link: "/next-step", // Optional link
+            onClick: async () => {},
+            link: "/next-step",
           },
           prev: {
             link: "/previous-step",
@@ -104,15 +105,22 @@ export default function RegisterRoot() {
             setUsername={setUsername}
             error={error}
             selectedRole={selected}
+            setValidateFn={setValidateForm} // <-- передаем сюда
           />
           <div className={style.wrapp_button_auth}>
             <button
               className={style.button_auth}
-              onClick={handleSubmit}
+              onClick={async () => {
+                if (validateForm()) {
+                  // сначала валидируем
+                  await handleSubmit(); // если все ок, отправляем
+                }
+              }}
               disabled={loading}
             >
               {loading ? "Загружается..." : "Зарегистрироваться"}
             </button>
+
             <div className={style.relink_btn}>
               <a
                 href="/login"

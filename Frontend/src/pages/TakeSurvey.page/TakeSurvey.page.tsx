@@ -1,18 +1,26 @@
 import glob_style from "../Dashboard.page/Dashboard.page.module.css";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import style from "../CreateSurvey.page/CreateSurvey.module.css";
 import style_take_surv from "./TakeSurvey.module.css";
+import { usePrompt } from "../../hooks/useNavigationBlocker";
+import { UserContext } from "../../App";
+
+interface Option {
+  id: number;
+  text: string;
+}
 
 interface Question {
   id: number;
   text: string;
-  type: string; // type добавляем для отображения разных типов полей
-  answers?: string[]; // Для вопросов с несколькими вариантами
+  type: string; // TEXT или MULTIPLE_CHOICE
+  options?: Option[]; // Вот это используем вместо answers
 }
 
 interface Survey {
+  id: number;
   title: string;
   description: string;
   questions: Question[];
@@ -23,10 +31,39 @@ interface Answer {
   content: string;
 }
 
+interface ValidationError {
+  [key: number]: string;
+}
+
 export default function TakeSurvey() {
   const { id } = useParams();
   const [survey, setSurvey] = useState<Survey | null>(null);
   const [answers, setAnswers] = useState<Answer[]>([]);
+  const [errors, setErrors] = useState<ValidationError>({});
+  const [selectedOptions, setSelectedOptions] = useState<{
+    [key: number]: string;
+  }>({});
+  // const [user, setUser] = useContext(UserContext);
+  const navigate = useNavigate();
+  const isFormDirty = true;
+
+  usePrompt(
+    isFormDirty,
+    "Вы уверены, что хотите уйти? Несохранённые изменения будут потеряны."
+  );
+
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = ""; // Это нужно оставить — чтобы браузер показал системный алерт
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("access_token");
@@ -46,7 +83,26 @@ export default function TakeSurvey() {
       .catch((err) => console.error("Ошибка при получении опросника:", err));
   }, [id]);
 
+  const validateAnswer = (
+    questionId: number,
+    content: string
+  ): string | null => {
+    if (!content.trim()) {
+      return "Ответ не может быть пустым";
+    }
+    if (content.trim().length < 3) {
+      return "Ответ должен содержать минимум 3 символа";
+    }
+    return null;
+  };
+
   const handleAnswerChange = (questionId: number, content: string) => {
+    const error = validateAnswer(questionId, content);
+    setErrors((prev) => ({
+      ...prev,
+      [questionId]: error || "",
+    }));
+
     setAnswers((prevAnswers) => {
       const updatedAnswers = prevAnswers.filter(
         (answer) => answer.question_id !== questionId
@@ -56,24 +112,85 @@ export default function TakeSurvey() {
     });
   };
 
+  const handleRadioChange = (questionId: number, optionText: string) => {
+    setSelectedOptions((prev) => ({
+      ...prev,
+      [questionId]: optionText,
+    }));
+    handleAnswerChange(questionId, optionText);
+  };
+
   const handleSubmit = () => {
+    if (!survey) return;
+
+    const newErrors: ValidationError = {};
+    let hasErrors = false;
+
+    survey.questions.forEach((question) => {
+      const answer = answers.find((a) => a.question_id === question.id);
+      if (!answer) {
+        if (
+          question.type === "MULTIPLE_CHOICE" &&
+          !selectedOptions[question.id]
+        ) {
+          newErrors[question.id] = "Пожалуйста, выберите один из вариантов";
+        } else {
+          newErrors[question.id] = "Ответ не может быть пустым";
+        }
+        hasErrors = true;
+        return;
+      }
+
+      const error = validateAnswer(question.id, answer.content);
+      if (error) {
+        newErrors[question.id] = error;
+        hasErrors = true;
+      }
+    });
+
+    if (hasErrors) {
+      setErrors(newErrors);
+      alert("Пожалуйста, исправьте ошибки в ответах перед отправкой.");
+      return;
+    }
+
     const token = localStorage.getItem("access_token");
     if (!token) {
       console.error("Нет токена для отправки ответов");
       return;
     }
 
+    const formattedAnswers = answers
+      .map((a) => {
+        const question = survey.questions.find((q) => q.id === a.question_id);
+
+        if (!question) return null;
+
+        const base = {
+          answerContent: a.content,
+          question: {
+            id: question.id,
+          },
+        };
+
+        if (question.type === "MULTIPLE_CHOICE") {
+          const selectedOption = question.options?.find(
+            (opt) => opt.text === a.content
+          );
+          return {
+            ...base,
+            selectedOptionId: selectedOption?.id ?? null,
+          };
+        }
+
+        return base;
+      })
+      .filter(Boolean); // удаляет null
+
     axios
       .post(
-        "http://localhost:8080/api/v1/surveys", // примерный эндпоинт для отправки
-        {
-          title: survey?.title,
-          survey_id: survey?.id,
-          answeredBy: {
-            username: "username", // заменить на имя пользователя
-          },
-          answers: answers,
-        },
+        `http://localhost:8080/api/survey-responses/${survey?.id}`,
+        formattedAnswers,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -82,9 +199,13 @@ export default function TakeSurvey() {
       )
       .then((response) => {
         console.log("Ответы отправлены:", response.data);
+        navigate("/dashboard");
       })
       .catch((error) => {
         console.error("Ошибка при отправке ответов:", error);
+        alert(
+          "Произошла ошибка при отправке ответов. Пожалуйста, попробуйте снова."
+        );
       });
   };
 
@@ -121,22 +242,47 @@ export default function TakeSurvey() {
                 </div>
 
                 {q.type === "TEXT" ? (
-                  <input
-                    type="text"
-                    placeholder="Введите ответ"
-                    onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                  />
-                ) : q.type === "SELECT" && q.answers ? (
-                  <select
-                    onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                  >
-                    <option value="">Выберите вариант</option>
-                    {q.answers.map((answer, index) => (
-                      <option key={index} value={answer}>
-                        {answer}
-                      </option>
+                  <div>
+                    <input
+                      type="text"
+                      placeholder="Введите ответ"
+                      onChange={(e) => handleAnswerChange(q.id, e.target.value)}
+                      className={errors[q.id] ? style.input_error : ""}
+                    />
+                    {errors[q.id] && (
+                      <p className={style.error_message}>{errors[q.id]}</p>
+                    )}
+                  </div>
+                ) : q.type === "MULTIPLE_CHOICE" && q.options ? (
+                  <div className={style_take_surv.radio_options}>
+                    {q.options.map((opt) => (
+                      <label
+                        key={opt.id}
+                        className={`${style_take_surv.radio_container} ${
+                          selectedOptions[q.id] === opt.text
+                            ? style_take_surv.selected
+                            : ""
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name={`question-${q.id}`}
+                          checked={selectedOptions[q.id] === opt.text}
+                          onChange={() => handleRadioChange(q.id, opt.text)}
+                        />
+                        <span className={style_take_surv.custom_radio}></span>
+                        <span className={style_take_surv.value_auth}>
+                          {opt.text}
+                        </span>
+                      </label>
                     ))}
-                  </select>
+
+                    {errors[q.id] && (
+                      <p className={style_take_surv.error_message}>
+                        {errors[q.id]}
+                      </p>
+                    )}
+                  </div>
                 ) : (
                   <p>Тип вопроса не поддерживается</p>
                 )}

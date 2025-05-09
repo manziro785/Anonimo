@@ -6,6 +6,11 @@
   --white-main: #ffffff;
   --grey-subtext: #bbb3b36e;
 }
+
+#root {
+  position: relative;
+  overflow-x: hidden;
+}
 /* #root {
   background: none;
 } */

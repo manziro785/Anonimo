@@ -1,7 +1,8 @@
 import Graph from "../GraphAnalise/Graph.comp";
 import Reviews from "../ReviewsAnalise/Reviews.comp";
 import style from "./Analise.comp.module.css";
-import bg from "../../../assets/common/bg_analise.svg";
+// import bg from "../../../assets/common/bg_analise.svg";
+import bg from "../../../assets/main_page/LinesBG (2) 1.svg";
 
 // import stumb_1 from "../../../assets/common/img_stub.svg";
 // import stumb_2 from "../../../assets/common/linegraph_stub.svg";

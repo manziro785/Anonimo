@@ -190,7 +190,7 @@ nav * {
 
   .btns ul li {
     margin-bottom: 0;
-    padding-left: 2rem;
+    /* padding-left: 2rem; */
   }
 
   .logo a {
@@ -295,7 +295,7 @@ nav * {
 
   .btns ul li {
     margin-bottom: 0;
-    padding-left: 0.8rem;
+    padding-left: 0.2rem;
   }
 }
 

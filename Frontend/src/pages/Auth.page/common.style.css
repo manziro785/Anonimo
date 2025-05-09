@@ -59,6 +59,7 @@ h3 {
   flex-direction: column;
   width: 100%;
   /* margin: 0 1rem; */
+  text-align: left;
 }
 
 label {
@@ -85,6 +86,13 @@ label {
 .value_auth input::placeholder {
   color: #b3b8bc;
 }
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 0px;
+}
+
 @media (max-width: 800px) {
   .value_auth {
     display: flex;

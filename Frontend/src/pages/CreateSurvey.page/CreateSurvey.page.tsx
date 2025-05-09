@@ -102,12 +102,14 @@ const CreateSurvey = () => {
     const surveyData = {
       title,
       description,
-      createdBy: { username: user.username },
+      // createdBy: { username: user.username },
       questions: questions.map((q) => ({
         text: q.text,
         type: q.type,
         ...(q.type === "MULTIPLE_CHOICE" && {
-          options: q.choices.filter((c: string) => c.trim() !== ""),
+          options: q.choices
+            .filter((c: string) => c.trim() !== "")
+            .map((c: string) => ({ text: c })),
         }),
       })),
     };

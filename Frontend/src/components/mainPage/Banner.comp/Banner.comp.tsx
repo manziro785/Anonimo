@@ -45,37 +45,55 @@ export default function Banner() {
             оставаясь анонимными, и помогайте компании становиться лучше.
           </div>
           <div className={style.btns}>
-            <NavLink
-              to="/register"
-              onClick={(e) => handleButtonClick(e, "/register")}
-              style={{
-                textDecoration: "none",
-                display: "flex",
-                justifyContent: "center",
-                background: "none",
-              }}
-            >
-              <div className={style.btn_reg}>Регистрация</div>
-            </NavLink>
-            <NavLink
-              to="/login"
-              onClick={(e) => handleButtonClick(e, "/login")}
-              style={{
-                textDecoration: "none",
-                display: "flex",
-                justifyContent: "center",
-                background: "none",
-              }}
-            >
-              <div className={style.btn_aut}>Вход</div>
-            </NavLink>
+            {isAuth ? (
+              <NavLink
+                to="/dashboard"
+                style={{
+                  textDecoration: "none",
+                  display: "flex",
+                  justifyContent: "center",
+                  background: "none",
+                }}
+              >
+                <div className={style.btn_reg}>Опросники</div>
+              </NavLink>
+            ) : (
+              <NavLink
+                to="/register"
+                onClick={(e) => handleButtonClick(e, "/register")}
+                style={{
+                  textDecoration: "none",
+                  display: "flex",
+                  justifyContent: "center",
+                  background: "none",
+                }}
+              >
+                <div className={style.btn_reg}>Регистрация</div>
+              </NavLink>
+            )}
+
+            {isAuth ? null : (
+              <NavLink
+                to="/login"
+                onClick={(e) => handleButtonClick(e, "/login")}
+                style={{
+                  textDecoration: "none",
+                  display: "flex",
+                  justifyContent: "center",
+                  background: "none",
+                }}
+              >
+                <div className={style.btn_aut}>Вход</div>
+              </NavLink>
+            )}
           </div>
           <div className={style.statistic}>
             <StatsCounter />
           </div>
         </div>
         <div className={style.right_side}>
-          <img src={line} alt="Line" className={style.line} />
+          {/* <img src={line} alt="Line" className={style.line} /> */}
+
           <img src={bg} alt="Background" className={style.bg_anonimo} />
         </div>
       </div>

@@ -8,7 +8,7 @@ interface TemplateProps {
 
 const Template: React.FC<TemplateProps> = ({ children }) => {
   return (
-    <div>
+    <div style={{ position: "relative", overflowX: "hidden" }}>
       <Header />
       <main>{children}</main>
       <Footer />
