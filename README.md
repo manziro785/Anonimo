@@ -1,6 +1,6 @@
 
 <!-- Баннер проекта -->
-![Anonimo Banner](./frontend/src/assets/readme/anonimo_1.png)
+![Anonimo Banner](./Frontend/src/assets/readme/anonimo_1.png)
 
 # Anonimo 
 **Anonimo** — платформа для анонимных опросов, чатов и аналитики внутри компаний.  
@@ -27,8 +27,8 @@
 ---
 
 ## 📸 Скриншоты
-![Dashboard](./assets/anonimo_2.png)
-![Survey](./assets/anonimo_3.png)
+![Dashboard](./Frontend/src/assets/readme/anonimo_2.png)
+![Survey](./Frontend/src/assets/readme/anonimo_3.png)
 
 ---
 
